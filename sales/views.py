@@ -5,6 +5,8 @@ from .models import Sale
 
 from .forms import SalesSearchForm
 
+import pandas as pd
+
 # Create your views here.
 
 # M - models
@@ -15,12 +17,29 @@ from .forms import SalesSearchForm
 def home_view(request):
     form = SalesSearchForm(request.POST or None)
 
+    date_from= None
     if request.method == 'POST':
         date_from = request.POST.get('date_from')
         date_to = request.POST.get('date_to')
         chart_type = request.POST.get('chart_type')
 
         print(date_from, date_to, chart_type)
+
+        qs = Sale.objects.all()
+        qs = Sale.objects.filter(created__date=date_from)
+        obj = Sale.objects.get(id=1)
+        print(obj)
+        print(qs)
+        print(qs.values())
+        print(qs.values_list())
+        print("==================================")
+        print("==================================")
+        df1 = pd.DataFrame(qs.values())
+        print(df1)
+        print("==================================")
+        print("==================================")
+        df2 = pd.DataFrame(qs.values_list())
+        print(df2)
 
     context = {
         'form': form
